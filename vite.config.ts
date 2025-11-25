@@ -1,9 +1,14 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '');
+    // ✅ Force le chargement des variables depuis process.env (Vercel)
+    const env = {
+      VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL || '',
+      VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY || '',
+      VITE_API_KEY: process.env.VITE_API_KEY || ''
+    };
     
     return {
       server: {
@@ -12,13 +17,10 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react()],
       define: {
-        // ✅ Toutes les variables Vite
+        // ✅ Injecter les variables dans le code
         'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),
         'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
         'import.meta.env.VITE_API_KEY': JSON.stringify(env.VITE_API_KEY),
-        // Anciennes variables (au cas où)
-        'process.env.API_KEY': JSON.stringify(env.VITE_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.VITE_API_KEY)
       },
       resolve: {
         alias: {
