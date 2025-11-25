@@ -1,16 +1,15 @@
-import path from 'path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite'
+import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  server: {
-    port: 3000,
-    host: '0.0.0.0',
-  },
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, '.'),
-    }
-  }
-});
+export default ({ mode }) => {
+  // Récupère toutes les variables d’environnement (Vercel + .env)
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return defineConfig({
+    plugins: [react()],
+    define: {
+      // Injection explicite dans le bundle
+      'process.env': env,
+    },
+  })
+}
