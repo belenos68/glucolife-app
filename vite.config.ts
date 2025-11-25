@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   server: {
     port: 3000,
-    host: '0.0.0.0', // Pour exposer sur le réseau
+    host: '0.0.0.0',
   },
   plugins: [react()],
   resolve: {
@@ -13,4 +13,5 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     }
   }
+  // ✅ PAS de "define" - Vite charge automatiquement VITE_* depuis .env
 });
