@@ -195,7 +195,11 @@ const MealComparisonModal: React.FC<{
             if (!import.meta.env.VITE_API_KEY) {
                 throw new Error("API_KEY is not configured.");
             }
-            const ai = new GoogleGenAI({ apiKey });
+            const apiKey = import.meta.env.VITE_API_KEY;
+                if (!apiKey) {
+                throw new Error("API_KEY is not configured.");
+                }
+const ai = new GoogleGenAI({ apiKey });
 
             const [mealA, mealB] = meals;
             const prompt = t('share.history.compare.aiPrompt', {
