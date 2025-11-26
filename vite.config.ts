@@ -13,5 +13,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     }
   }
-  // ✅ PAS de "define" - Vite charge automatiquement VITE_* depuis .env
 });
