@@ -157,7 +157,7 @@ const MealPlanCard: React.FC = () => {
         setPlan(null);
 
         try {
-            const apiKey = process.env.API_KEY;
+            const apiKey = import.meta.env.VITE_API_KEY;
             if (!apiKey) throw new Error("API_KEY not configured.");
             const ai = new GoogleGenAI({ apiKey });
 
