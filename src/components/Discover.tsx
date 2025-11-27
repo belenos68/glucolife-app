@@ -186,43 +186,46 @@ const MealComparisonModal: React.FC<{
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const generateInsight = useCallback(async () => {
-        if (!user) return;
-        setIsLoading(true);
-        setError('');
-        setInsight('');
+    if (!user) return;
+    setIsLoading(true);
+    setError('');
+    setInsight('');
 
-        try {
-            if (!import.meta.env.VITE_API_KEY) {
-                throw new Error("API_KEY is not configured.");
-            }
-            const ai = new GoogleGenAI({ apiKey });
-
-            const [mealA, mealB] = meals;
-            const prompt = t('share.history.compare.aiPrompt', {
-                mealAName: mealA.name,
-                mealACarbs: mealA.carbohydrates,
-                mealAGI: mealA.glycemicIndex,
-                mealAScore: mealA.glycemicScore,
-                mealBName: mealB.name,
-                mealBCarbs: mealB.carbohydrates,
-                mealBGI: mealB.glycemicIndex,
-                mealBScore: mealB.glycemicScore,
-                language: language === 'fr' ? 'français' : 'English',
-            });
-
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-            });
-
-            setInsight(response.text.trim());
-        } catch (err) {
-            console.error("Failed to generate comparison insight:", err);
-            setError(t('share.history.compare.aiError'));
-        } finally {
-            setIsLoading(false);
+    try {
+        // ✅ AJOUTEZ CETTE LIGNE
+        const apiKey = import.meta.env.VITE_API_KEY;
+        if (!apiKey) {
+            throw new Error("API_KEY is not configured.");
         }
-    }, [meals, user, t, language]);
+        
+        const ai = new GoogleGenAI({ apiKey }); // ✅ Maintenant apiKey existe
+
+        const [mealA, mealB] = meals;
+        const prompt = t('share.history.compare.aiPrompt', {
+            mealAName: mealA.name,
+            mealACarbs: mealA.carbohydrates,
+            mealAGI: mealA.glycemicIndex,
+            mealAScore: mealA.glycemicScore,
+            mealBName: mealB.name,
+            mealBCarbs: mealB.carbohydrates,
+            mealBGI: mealB.glycemicIndex,
+            mealBScore: mealB.glycemicScore,
+            language: language === 'fr' ? 'français' : 'English',
+        });
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+        });
+
+        setInsight(response.text.trim());
+    } catch (err) {
+        console.error("Failed to generate comparison insight:", err);
+        setError(t('share.history.compare.aiError'));
+    } finally {
+        setIsLoading(false);
+    }
+}, [meals, user, t, language]);
 
     useEffect(() => {
         if (isOpen) {
