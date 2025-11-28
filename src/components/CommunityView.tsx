@@ -151,52 +151,57 @@ const MealPlanCard: React.FC = () => {
     }, []);
 
     const generatePlan = async () => {
-        if (!user) return;
-        setIsLoading(true);
-        setError('');
-        setPlan(null);
+    if (!user) return;
+    setIsLoading(true);
+    setError('');
+    setPlan(null);
 
-        try {
-            const apiKey = import.meta.env.VITE_API_KEY;
-            if (!apiKey) throw new Error("API_KEY not configured.");
-            const ai = new GoogleGenAI({ apiKey });
+    try {
+        const apiKey = import.meta.env.VITE_API_KEY;
+        if (!apiKey) throw new Error("API_KEY not configured.");
+        
+        const ai = new GoogleGenAI({ apiKey });
 
-            const goalDescription = goal 
-                ? t('share.community.mealPlan.goalDescription', { targetReduction: goal.targetReduction }) 
-                : t('share.community.mealPlan.noGoalDescription');
-            
-            const prompt = t('share.community.mealPlan.prompt', {
-                program: user.trackingProgram,
-                goalDescription: goalDescription,
-                language: language === 'fr' ? 'français' : 'English',
-            });
+        const goalDescription = goal 
+            ? t('share.community.mealPlan.goalDescription', { targetReduction: goal.targetReduction }) 
+            : t('share.community.mealPlan.noGoalDescription');
+        
+        const basePrompt = t('share.community.mealPlan.prompt', {
+            program: user.trackingProgram,
+            goalDescription: goalDescription,
+            language: language === 'fr' ? 'français' : 'English',
+        });
 
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            breakfast: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, description: { type: Type.STRING } }, required: ['name', 'description'] },
-                            lunch: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, description: { type: Type.STRING } }, required: ['name', 'description'] },
-                            dinner: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, description: { type: Type.STRING } }, required: ['name', 'description'] },
-                        },
-                        required: ["breakfast", "lunch", "dinner"],
-                    }
-                }
-            });
+        const prompt = `${basePrompt}
 
-            const parsedPlan = JSON.parse(response.text.trim());
-            setPlan(parsedPlan);
-        } catch (err) {
-            console.error("Meal Plan Generation Error:", err);
-            setError(t('share.community.mealPlan.error'));
-        } finally {
-            setIsLoading(false);
-        }
-    };
+IMPORTANT: Réponds UNIQUEMENT avec un objet JSON valide (sans texte avant ou après, sans balises markdown).
+Format requis:
+{
+  "breakfast": {"name": "Nom du petit-déjeuner", "description": "Description brève"},
+  "lunch": {"name": "Nom du déjeuner", "description": "Description brève"},
+  "dinner": {"name": "Nom du dîner", "description": "Description brève"}
+}`;
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+        });
+
+        console.log('Raw response:', response.text);
+        
+        // Nettoyer la réponse
+        let text = response.text.trim();
+        text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+        
+        const parsedPlan = JSON.parse(text);
+        setPlan(parsedPlan);
+    } catch (err: any) {
+        console.error("Meal Plan Generation Error:", err);
+        setError(t('share.community.mealPlan.error'));
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     return (
         <>
