@@ -5,6 +5,7 @@ import { communityPostsData, leaderboardData } from '../data/community';
 import { communityMeals } from '../data/communityMeals';
 import { ThumbUpIcon, HeartIcon, LightbulbIcon, ShareIcon, TrophyIcon, SparklesIcon, StarIcon, ArrowUpIcon, ArrowDownIcon, MinusIcon, TrashIcon } from './icons/Icons';
 import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const ConfirmationModal: React.FC<{
   isOpen: boolean;
@@ -159,49 +160,44 @@ const MealPlanCard: React.FC = () => {
     try {
         const apiKey = import.meta.env.VITE_API_KEY;
         if (!apiKey) throw new Error("API_KEY not configured.");
-        
-        const ai = new GoogleGenAI({ apiKey });
+
+        const ai = new GoogleGenerativeAI(apiKey);
+        const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const goalDescription = goal 
             ? t('share.community.mealPlan.goalDescription', { targetReduction: goal.targetReduction }) 
             : t('share.community.mealPlan.noGoalDescription');
-        
+
         const basePrompt = t('share.community.mealPlan.prompt', {
             program: user.trackingProgram,
-            goalDescription: goalDescription,
+            goalDescription,
             language: language === 'fr' ? 'français' : 'English',
         });
 
         const prompt = `${basePrompt}
 
-IMPORTANT: Réponds UNIQUEMENT avec un objet JSON valide (sans texte avant ou après, sans balises markdown).
-Format requis:
+IMPORTANT: Réponds UNIQUEMENT avec un objet JSON valide.
 {
-  "breakfast": {"name": "Nom du petit-déjeuner", "description": "Description brève"},
-  "lunch": {"name": "Nom du déjeuner", "description": "Description brève"},
-  "dinner": {"name": "Nom du dîner", "description": "Description brève"}
+ "breakfast": {"name": "...", "description": "..."},
+ "lunch": {"name": "...", "description": "..."},
+ "dinner": {"name": "...", "description": "..."}
 }`;
 
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: prompt,
-        });
+        const response = await model.generateContent(prompt);
 
-        console.log('Raw response:', response.text);
-        
-        // Nettoyer la réponse
-        let text = response.text.trim();
-        text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '');
-        
-        const parsedPlan = JSON.parse(text);
+        let jsonText = response.response.text().trim();
+        jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '');
+
+        const parsedPlan = JSON.parse(jsonText);
         setPlan(parsedPlan);
-    } catch (err: any) {
+    } catch (err) {
         console.error("Meal Plan Generation Error:", err);
         setError(t('share.community.mealPlan.error'));
     } finally {
         setIsLoading(false);
     }
 };
+
 
     return (
         <>
