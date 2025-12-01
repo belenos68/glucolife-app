@@ -8,6 +8,7 @@ import { communityPostsData } from '../data/community';
 import { SearchIcon, TrashIcon, XMarkIcon, SparklesIcon, ShareIcon } from './icons/Icons';
 import { GoogleGenAI } from "@google/genai";
 
+
 const MealDetailModal: React.FC<{ meal: Meal | null, isOpen: boolean, onClose: () => void }> = ({ meal, isOpen, onClose }) => {
     const { t } = useLanguage();
     const [isAdded, setIsAdded] = useState(false);
@@ -689,7 +690,7 @@ const ArticlesView: React.FC<{}> = () => {
 
     return (
         <div className="space-y-6">
-            <div className="sticky top-[8rem] bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm py-2 z-10">
+            <div className="sticky top-0 bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm py-2 z-10">
                 <div className="relative">
                     <input 
                         type="text"
