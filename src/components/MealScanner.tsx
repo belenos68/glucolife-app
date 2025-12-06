@@ -191,9 +191,11 @@ const MealScanner: React.FC = () => {
 
 
     const handleSaveMeal = async () => {
-        if (!stagedMeal || !user) return;
+    if (!stagedMeal || !user) return;
 
-        setAnalysisState('loading');
+    setAnalysisState('loading');
+
+    try {
         let finalMeal: Meal = {
             id: new Date().toISOString(),
             timestamp: new Date().toISOString(),
@@ -202,7 +204,10 @@ const MealScanner: React.FC = () => {
             carbohydrates: stagedMeal.carbohydrates!,
             glycemicIndex: stagedMeal.glycemicIndex!,
             advice: stagedMeal.advice!,
-            glycemicScore: calculateGlycemicScore(stagedMeal.carbohydrates!, stagedMeal.glycemicIndex!),
+            glycemicScore: calculateGlycemicScore(
+                stagedMeal.carbohydrates!,
+                stagedMeal.glycemicIndex!
+            ),
             ingredients: stagedMeal.ingredients,
             protein: stagedMeal.protein,
             fats: stagedMeal.fats,
@@ -212,48 +217,88 @@ const MealScanner: React.FC = () => {
         const preValue = parseFloat(preMealGlucose);
         const postValue = parseFloat(postMealGlucose);
 
+        // ------------------------------
+        //  GLUCOSE SPIKE MODE
+        // ------------------------------
         if (!isNaN(preValue) && !isNaN(postValue) && postValue > preValue) {
             finalMeal.preMealGlucose = preValue;
             finalMeal.postMealGlucose = postValue;
+
             const spike = postValue - preValue;
-            finalMeal.glycemicScore = calculateGlycemicScore(finalMeal.carbohydrates, finalMeal.glycemicIndex, spike);
 
-            try {
-                const apiKey = import.meta.env.VITE_API_KEY;
-                if (!apiKey) throw new Error("API_KEY is not configured.");
+            finalMeal.glycemicScore = calculateGlycemicScore(
+                finalMeal.carbohydrates,
+                finalMeal.glycemicIndex,
+                spike
+            );
 
-                const ai = new GoogleGenAI({ apiKey });
-                const prompt = t('scanner.personalizedAdvicePrompt', {
-                    program: user.trackingProgram,
-                    mealName: finalMeal.name,
-                    carbs: finalMeal.carbohydrates,
-                    gi: finalMeal.glycemicIndex,
-                    preValue: preValue,
-                    postValue: postValue,
-                    spike: spike.toFixed(1),
-                    language: language === 'fr' ? 'français' : 'English'
-                });
-                
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: prompt
-                });
+            // ------------------------------
+            //     AI TIMEOUT PROTECTED
+            // ------------------------------
+            const apiKey = import.meta.env.VITE_API_KEY;
 
-                finalMeal.personalizedAdvice = response.text.trim();
+            if (apiKey) {
+                try {
+                    const ai = new GoogleGenAI({ apiKey });
 
-            } catch (err) {
-                console.error("Failed to get personalized advice:", err);
-                finalMeal.personalizedAdvice = t('scanner.personalizedAdviceError');
+                    const promptText = t('scanner.personalizedAdvicePrompt', {
+                        program: user.trackingProgram,
+                        mealName: finalMeal.name,
+                        carbs: finalMeal.carbohydrates,
+                        gi: finalMeal.glycemicIndex,
+                        preValue,
+                        postValue,
+                        spike: spike.toFixed(1),
+                        language: language === 'fr' ? 'français' : 'English',
+                    });
+
+                    // Promise that runs the AI
+                    const aiPromise = ai.models.generateContent({
+                        model: 'gemini-2.5-flash',
+                        contents: promptText,
+                    });
+
+                    // Timeout Promise
+                    const timeoutPromise = new Promise((resolve) =>
+                        setTimeout(() => resolve(null), 9000)
+                    );
+
+                    // Race both promises
+                    const response: any = await Promise.race([aiPromise, timeoutPromise]);
+
+                    if (response && typeof response.text === "function") {
+                        const text = await response.text();
+                        finalMeal.personalizedAdvice = text.trim();
+                    } else {
+                        finalMeal.personalizedAdvice = "";
+                    }
+
+                } catch (error) {
+                    console.warn("AI failed:", error);
+                    finalMeal.personalizedAdvice = "";
+                }
             }
         }
-        
-        const storedMeals = localStorage.getItem('gluco-meals');
-        const meals: Meal[] = storedMeals ? JSON.parse(storedMeals) : [];
-        meals.push(finalMeal);
-        localStorage.setItem('gluco-meals', JSON.stringify(meals));
+
+        // ------------------------------
+        //   SAVE MEAL LOCALLY
+        // ------------------------------
+        try {
+            const stored = localStorage.getItem('gluco-meals');
+            const meals = stored ? JSON.parse(stored) : [];
+            meals.push(finalMeal);
+            localStorage.setItem('gluco-meals', JSON.stringify(meals));
+        } catch (err) {
+            console.error("LocalStorage error:", err);
+        }
+
         logActivity();
         navigate('/dashboard');
-    };
+
+    } finally {
+        setAnalysisState('initial'); // ✔ REMPLACE "idle"
+    }
+};
 
     return (
         <div className="p-4 space-y-6">
