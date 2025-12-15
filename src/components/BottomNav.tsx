@@ -1,10 +1,15 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { HomeIcon, ScanIcon, CompassIcon, ChatIcon, ProfileIcon } from './icons/Icons';
+import {
+  HomeIcon,
+  ScanIcon,
+  CompassIcon,
+  ChatIcon,
+  ProfileIcon
+} from './icons/Icons';
 import { useLanguage } from '../App';
 
-const BottomNav = () => {
+const BottomNav: React.FC = () => {
   const { t } = useLanguage();
 
   const navItems = [
@@ -15,24 +20,43 @@ const BottomNav = () => {
     { path: '/profile', icon: ProfileIcon, label: t('nav.profile') },
   ];
 
-  const activeLinkClass = 'text-mint-green';
-  const inactiveLinkClass = 'text-gray-400 dark:text-gray-500 hover:text-mint-green-light';
-
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-t-lg border-t border-gray-200 dark:border-gray-700 z-50">
-      <div className="container mx-auto max-w-lg flex justify-around h-16 items-center">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) => 
-              `flex flex-col items-center justify-center w-full transition-colors duration-200 ${isActive ? activeLinkClass : inactiveLinkClass}`
-            }
-          >
-            <item.icon className="h-6 w-6" />
-            <span className="text-xs mt-1">{item.label}</span>
-          </NavLink>
-        ))}
+    <nav
+      className="
+        fixed bottom-0 left-0 right-0 z-50
+        bg-white/95 dark:bg-gray-900/95
+        backdrop-blur-md
+        border-t border-gray-200 dark:border-gray-700
+        shadow-[0_-4px_12px_rgba(0,0,0,0.08)]
+      "
+    >
+      {/* Conteneur centré et compact */}
+      <div className="mx-auto max-w-md px-4">
+        <div className="flex justify-center items-center gap-4 h-16">
+          {navItems.map(({ path, icon: Icon, label }) => (
+            <NavLink
+              key={path}
+              to={path}
+              className={({ isActive }) =>
+                `
+                flex flex-col items-center justify-center
+                px-3 py-1 rounded-xl
+                transition-all duration-200
+                ${
+                  isActive
+                    ? 'text-mint-green font-bold bg-mint-green/10'
+                    : 'text-gray-600 dark:text-gray-400 font-semibold hover:text-mint-green'
+                }
+                `
+              }
+            >
+              <Icon className="h-6 w-6 mb-0.5" />
+              <span className="text-[11px] leading-none whitespace-nowrap">
+                {label}
+              </span>
+            </NavLink>
+          ))}
+        </div>
       </div>
     </nav>
   );
