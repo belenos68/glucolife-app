@@ -10,7 +10,7 @@ const translations = {
       feature2Desc: "Posez des questions, recevez des conseils personnalisés et restez motivé grâce à votre coach IA.",
       feature3Title: "Suivi & Progression",
       feature3Desc: "Visualisez vos progrès avec des graphiques clairs, fixez des objectifs et débloquez des succès.",
-      footer: "© {{year}} GlucoLife. Tous droits réservés."
+      footer: "© {{year}} GlucoViva. Tous droits réservés."
     },
     auth: {
       welcomeBack: "Bon retour !",
@@ -39,7 +39,7 @@ const translations = {
       profile: 'Profil',
     },
     dashboard: {
-      disclaimer: "GlucoLife est un outil de suivi et non un dispositif médical. Consultez toujours un professionnel de santé pour tout conseil médical.",
+      disclaimer: "GlucoViva est un outil de suivi et non un dispositif médical. Consultez toujours un professionnel de santé pour tout conseil médical.",
       greeting: "Bonjour, {{name}} !",
       tagline: "Prêt pour votre objectif glycémique de la journée ?",
       program: "Votre programme",
@@ -107,7 +107,7 @@ const translations = {
         personalizedAdvicePrompt: "Agis en tant que coach en nutrition. Mon programme est '{{program}}'. J'ai mangé '{{mealName}}' ({{carbs}}g glucides, IG {{gi}}). Ma glycémie avant était de {{preValue}}mg/dL et après de {{postValue}}mg/dL (pic de {{spike}}mg/dL). Fournis un conseil court (2-3 phrases) et personnalisé en {{language}} basé sur ces données. Sois encourageant.",
         personalizedAdviceError: "Impossible de générer le conseil personnalisé pour le moment.",
         shareTitle: "Découvrez mon plat !",
-        shareText: "Je viens d'analyser mon plat '{{mealName}}' avec GlucoLife ! {{carbs}}g de glucides, IG {{gi}}. Le conseil de l'IA : '{{advice}}'",
+        shareText: "Je viens d'analyser mon plat '{{mealName}}' avec GlucoViva ! {{carbs}}g de glucides, IG {{gi}}. Le conseil de l'IA : '{{advice}}'",
         shareSuccess: "Copié dans le presse-papiers !",
         shareError: "Le partage a échoué."
     },
@@ -165,7 +165,7 @@ const translations = {
                 aiLoading: "Génération de l'analyse comparative...",
                 aiError: "Impossible de générer l'analyse comparative pour le moment.",
                 aiPrompt: "Compare ces deux plats d'un point de vue nutritionnel et glycémique. Plat A: {{mealAName}} ({{mealACarbs}}g glucides, IG {{mealAGI}}, score {{mealAScore}}). Plat B: {{mealBName}} ({{mealBCarbs}}g glucides, IG {{mealBGI}}, score {{mealBScore}}). Explique lequel est le meilleur choix et pourquoi en 2-3 phrases. Réponds en {{language}}.",
-                shareText: "Regardez cette comparaison intéressante entre '{{mealA}}' et '{{mealB}}' que j'ai faite sur GlucoLife ! Qu'en pensez-vous ?"
+                shareText: "Regardez cette comparaison intéressante entre '{{mealA}}' et '{{mealB}}' que j'ai faite sur GlucoViva ! Qu'en pensez-vous ?"
             },
             sortBy: "Trier par",
             newest: "Plus récent",
@@ -210,7 +210,7 @@ const translations = {
                 title: "Partager votre plat",
                 prompt: "Ajoutez un message à votre publication :",
                 placeholder: "Ex: Mon dîner de ce soir, super score !",
-                defaultMessage: "Voici mon dernier plat analysé avec GlucoLife, qu'en pensez-vous ?",
+                defaultMessage: "Voici mon dernier plat analysé avec GlucoViva, qu'en pensez-vous ?",
                 success: "Publication partagée avec succès !"
             },
             mealPlan: {
@@ -230,7 +230,7 @@ const translations = {
                 shareModal: {
                     title: "Partager votre plan repas",
                     prompt: "Ajoutez un message à votre plan :",
-                    defaultMessage: "Voici le plan repas que GlucoLife m'a généré aujourd'hui ! Qu'en pensez-vous ?",
+                    defaultMessage: "Voici le plan repas que GlucoViva m'a généré aujourd'hui ! Qu'en pensez-vous ?",
                 }
             }
         }
@@ -304,13 +304,13 @@ const translations = {
             },
             shareModal: {
                 title: "Partager mon résumé",
-                summaryTitle: "Mon résumé GlucoLife",
+                summaryTitle: "Mon résumé GlucoViva",
                 summaryFor: "Résumé pour {{name}}",
                 mealsScanned: "Plats scannés",
                 avgScore: "Score moyen",
                 dayStreak: "Série",
                 share: "Partager",
-                shareText: "Voici mon résumé sur GlucoLife ! {{mealCount}} plats scannés, un score moyen de {{avgScore}}, et une série de {{streak}} jours ! #GlucoLife",
+                shareText: "Voici mon résumé sur GlucoViva ! {{mealCount}} plats scannés, un score moyen de {{avgScore}}, et une série de {{streak}} jours ! #GlucoViva",
                 copied: "Résumé copié dans le presse-papiers !",
                 shareError: "Erreur lors du partage.",
             },
@@ -318,8 +318,8 @@ const translations = {
                 title: "Conditions d'Utilisation",
                 lastUpdated: "Dernière mise à jour : 24 Juillet 2024",
                 content: [
-                    { title: "1. Introduction", text: "Bienvenue sur GlucoLife. En utilisant notre application, vous acceptez ces conditions d'utilisation." },
-                    { title: "2. Utilisation de l'App", text: "GlucoLife est un outil informatif et ne remplace pas un avis médical. Vous êtes responsable de l'interprétation des données et des décisions concernant votre santé." },
+                    { title: "1. Introduction", text: "Bienvenue sur GlucoViva. En utilisant notre application, vous acceptez ces conditions d'utilisation." },
+                    { title: "2. Utilisation de l'App", text: "GlucoViva est un outil informatif et ne remplace pas un avis médical. Vous êtes responsable de l'interprétation des données et des décisions concernant votre santé." },
                     { title: "3. Compte Utilisateur", text: "Vous êtes responsable de la sécurité de votre compte et de votre mot de passe." },
                     { title: "4. Données Utilisateur", text: "En utilisant le scan, vous nous autorisez à analyser les images de vos repas pour vous fournir des informations nutritionnelles. Vos données sont stockées localement sur votre appareil." },
                     { title: "5. Limitations de responsabilité", text: "Nous ne sommes pas responsables des décisions de santé que vous prenez en vous basant sur les informations de l'application. Consultez toujours un professionnel de santé." }
@@ -339,7 +339,7 @@ const translations = {
             }
         },
         helpView: {
-            welcomeTitle: "Bienvenue sur GlucoLife",
+            welcomeTitle: "Bienvenue sur GlucoViva",
             welcomeDesc: "Votre guide pour une meilleure gestion de la glycémie. Cette section vous aidera à comprendre comment tirer le meilleur parti de l'application.",
             dashboardTitle: "Tableau de Bord",
             dashboardDesc1: "<strong>Aperçu :</strong> C'est votre page d'accueil. Vous y trouverez un résumé de votre journée, votre série, des conseils de l'IA et vos derniers repas.",
@@ -358,7 +358,7 @@ const translations = {
             profileDesc1: "<strong>Programme :</strong> Choisissez le programme qui correspond le mieux à vos besoins (Prévention, Gestion, Optimisation).",
             profileDesc2: "<strong>Objectifs :</strong> Fixez-vous des objectifs de réduction de score pour rester motivé.",
             profileDesc3: "<strong>Paramètres :</strong> Gérez les options de l'application, comme le thème, la langue, et l'export de vos données.",
-            reminder: "N'oubliez pas, GlucoLife est un outil de support. Pour toute question médicale, veuillez consulter un professionnel de la santé.",
+            reminder: "N'oubliez pas, GlucoViva est un outil de support. Pour toute question médicale, veuillez consulter un professionnel de la santé.",
             assistantLinkTitle: "Besoin d'aide ?",
             assistantLinkDescription: "Votre assistant IA est là pour répondre à toutes vos questions sur l'application et la nutrition.",
             assistantLinkButton: "Demander à l'Assistant",
@@ -378,7 +378,7 @@ const translations = {
         takePhoto: "Prendre une photo",
         choosePhoto: "Choisir depuis la galerie",
         rating: {
-            title: "Vous aimez GlucoLife ?",
+            title: "Vous aimez GlucoViva ?",
             subtitle: "Votre avis nous aide à nous améliorer !",
             averageRating: "Note moyenne : {{average}} / 5",
             totalRatings: "({{count}} avis)",
@@ -386,10 +386,10 @@ const translations = {
         },
         invite: {
             title: "Invitez un ami !",
-            description: "Partagez GlucoLife avec vos proches et aidez-les à prendre en main leur santé.",
+            description: "Partagez GlucoViva avec vos proches et aidez-les à prendre en main leur santé.",
             button: "Inviter",
-            shareTitle: "Découvrez GlucoLife !",
-            shareText: "J'utilise GlucoLife pour mieux gérer ma glycémie, c'est super utile ! Je te la recommande. #GlucoLife"
+            shareTitle: "Découvrez GlucoViva !",
+            shareText: "J'utilise GlucoViva pour mieux gérer ma glycémie, c'est super utile ! Je te la recommande. #GlucoViva"
         },
         programs: {
             prevention: "Équilibre & Vitalité",
@@ -408,7 +408,7 @@ const translations = {
         },
         trophy: {
             unlockTitle: "Succès Déverrouillé !",
-            shareMessage: "J'ai déverrouillé le succès '{{trophyName}}' sur GlucoLife ! #GlucoLife",
+            shareMessage: "J'ai déverrouillé le succès '{{trophyName}}' sur GlucoViva ! #GlucoViva",
             scanner_novice: {
                 name: "Novice du Scan",
                 description: "Vous avez scanné vos 10 premiers repas. Continuez comme ça !"
@@ -443,7 +443,7 @@ const translations = {
             generating: "Génération de l'image...",
             error: "Impossible de générer l'image. Veuillez réessayer.",
             share: "Partager l'image",
-            shareText: "Voici un conseil nutritionnel du jour de l'app GlucoLife !"
+            shareText: "Voici un conseil nutritionnel du jour de l'app GlucoViva !"
         }
     }
   },
@@ -458,7 +458,7 @@ const translations = {
         feature2Desc: "Ask questions, get personalized advice, and stay motivated with your AI coach.",
         feature3Title: "Tracking & Progress",
         feature3Desc: "Visualize your progress with clear charts, set goals, and unlock achievements.",
-        footer: "© {{year}} GlucoLife. All rights reserved."
+        footer: "© {{year}} GlucoViva. All rights reserved."
     },
     auth: {
         welcomeBack: "Welcome back!",
@@ -487,7 +487,7 @@ const translations = {
         profile: "Profile"
     },
     dashboard: {
-        disclaimer: "GlucoLife is a tracking tool and not a medical device. Always consult a healthcare professional for any medical advice.",
+        disclaimer: "GlucoViva is a tracking tool and not a medical device. Always consult a healthcare professional for any medical advice.",
         greeting: "Hello, {{name}}!",
         tagline: "Ready for today's glycemic goal?",
         program: "Your Program",
@@ -555,7 +555,7 @@ const translations = {
         personalizedAdvicePrompt: "Act as a nutrition coach. My program is '{{program}}'. I ate '{{mealName}}' ({{carbs}}g carbs, GI {{gi}}). My pre-meal glucose was {{preValue}}mg/dL and post-meal was {{postValue}}mg/dL (a spike of {{spike}}mg/dL). Provide a short (2-3 sentences) and personalized tip in {{language}} based on this data. Be encouraging.",
         personalizedAdviceError: "Could not generate personalized advice at this time.",
         shareTitle: "Check out my meal!",
-        shareText: "I just analyzed my '{{mealName}}' meal with GlucoLife! {{carbs}}g of carbs, {{gi}} GI. The AI's advice: '{{advice}}'",
+        shareText: "I just analyzed my '{{mealName}}' meal with GlucoViva! {{carbs}}g of carbs, {{gi}} GI. The AI's advice: '{{advice}}'",
         shareSuccess: "Copied to clipboard!",
         shareError: "Sharing failed."
     },
@@ -613,7 +613,7 @@ const translations = {
                 aiLoading: "Generating comparison analysis...",
                 aiError: "Could not generate comparison analysis at this time.",
                 aiPrompt: "Compare these two meals from a nutritional and glycemic perspective. Meal A: {{mealAName}} ({{mealACarbs}}g carbs, GI {{mealAGI}}, score {{mealAScore}}). Meal B: {{mealBName}} ({{mealBCarbs}}g carbs, GI {{mealBGI}}, score {{mealBScore}}). Explain which is the better choice and why in 2-3 sentences. Respond in {{language}}.",
-                shareText: "Check out this interesting comparison between '{{mealA}}' and '{{mealB}}' I made on GlucoLife! What do you think?"
+                shareText: "Check out this interesting comparison between '{{mealA}}' and '{{mealB}}' I made on GlucoViva! What do you think?"
             },
             sortBy: "Sort by",
             newest: "Newest",
@@ -658,7 +658,7 @@ const translations = {
                 title: "Share Your Meal",
                 prompt: "Add a message to your post:",
                 placeholder: "e.g., My dinner tonight, great score!",
-                defaultMessage: "Here's my latest meal analyzed with GlucoLife, what do you think?",
+                defaultMessage: "Here's my latest meal analyzed with GlucoViva, what do you think?",
                 success: "Post shared successfully!"
             },
             mealPlan: {
@@ -678,7 +678,7 @@ const translations = {
                 shareModal: {
                     title: "Share your meal plan",
                     prompt: "Add a message to your plan:",
-                    defaultMessage: "Here is the meal plan GlucoLife generated for me today! What do you think?",
+                    defaultMessage: "Here is the meal plan GlucoViva generated for me today! What do you think?",
                 }
             }
         }
@@ -752,13 +752,13 @@ const translations = {
             },
             shareModal: {
                 title: "Share My Summary",
-                summaryTitle: "My GlucoLife Summary",
+                summaryTitle: "My GlucoViva Summary",
                 summaryFor: "Summary for {{name}}",
                 mealsScanned: "Meals Scanned",
                 avgScore: "Avg. Score",
                 dayStreak: "Day Streak",
                 share: "Share",
-                shareText: "Here's my GlucoLife summary! {{mealCount}} meals scanned, an average score of {{avgScore}}, and a {{streak}}-day streak! #GlucoLife",
+                shareText: "Here's my GlucoViva summary! {{mealCount}} meals scanned, an average score of {{avgScore}}, and a {{streak}}-day streak! #GlucoViva",
                 copied: "Summary copied to clipboard!",
                 shareError: "Error while sharing."
             },
@@ -766,8 +766,8 @@ const translations = {
                 title: "Terms of Use",
                 lastUpdated: "Last updated: July 24, 2024",
                 content: [
-                    { title: "1. Introduction", text: "Welcome to GlucoLife. By using our application, you agree to these terms of use." },
-                    { title: "2. App Usage", text: "GlucoLife is an informational tool and does not replace medical advice. You are responsible for interpreting the data and making decisions about your health." },
+                    { title: "1. Introduction", text: "Welcome to GlucoViva. By using our application, you agree to these terms of use." },
+                    { title: "2. App Usage", text: "GlucoViva is an informational tool and does not replace medical advice. You are responsible for interpreting the data and making decisions about your health." },
                     { title: "3. User Account", text: "You are responsible for the security of your account and password." },
                     { title: "4. User Data", text: "By using the scan feature, you authorize us to analyze your meal images to provide you with nutritional information. Your data is stored locally on your device." },
                     { title: "5. Limitation of Liability", text: "We are not responsible for health decisions you make based on the application's information. Always consult a healthcare professional." }
@@ -787,7 +787,7 @@ const translations = {
             }
         },
         helpView: {
-            welcomeTitle: "Welcome to GlucoLife",
+            welcomeTitle: "Welcome to GlucoViva",
             welcomeDesc: "Your guide to better blood sugar management. This section will help you understand how to get the most out of the application.",
             dashboardTitle: "Dashboard",
             dashboardDesc1: "<strong>Overview:</strong> This is your home page. Here you'll find a summary of your day, your streak, AI tips, and your latest meals.",
@@ -806,7 +806,7 @@ const translations = {
             profileDesc1: "<strong>Program:</strong> Choose the program that best suits your needs (Prevention, Management, Optimization).",
             profileDesc2: "<strong>Goals:</strong> Set score reduction goals to stay motivated.",
             profileDesc3: "<strong>Settings:</strong> Manage application options, such as theme, language, and exporting your data.",
-            reminder: "Remember, GlucoLife is a support tool. For any medical questions, please consult a healthcare professional.",
+            reminder: "Remember, GlucoViva is a support tool. For any medical questions, please consult a healthcare professional.",
             assistantLinkTitle: "Need help?",
             assistantLinkDescription: "Your AI assistant is here to answer all your questions about the app and nutrition.",
             assistantLinkButton: "Ask the Assistant"
@@ -826,7 +826,7 @@ const translations = {
         takePhoto: "Take Photo",
         choosePhoto: "Choose from Gallery",
         rating: {
-            title: "Enjoying GlucoLife?",
+            title: "Enjoying GlucoViva?",
             subtitle: "Your rating helps us improve!",
             averageRating: "Average rating: {{average}} / 5",
             totalRatings: "({{count}} ratings)",
@@ -834,10 +834,10 @@ const translations = {
         },
         invite: {
             title: "Invite a Friend!",
-            description: "Share GlucoLife with your loved ones and help them take control of their health.",
+            description: "Share GlucoViva with your loved ones and help them take control of their health.",
             button: "Invite",
-            shareTitle: "Discover GlucoLife!",
-            shareText: "I'm using GlucoLife to better manage my blood sugar, it's super helpful! I recommend it. #GlucoLife"
+            shareTitle: "Discover GlucoViva!",
+            shareText: "I'm using GlucoViva to better manage my blood sugar, it's super helpful! I recommend it. #GlucoViva"
         },
         programs: {
             prevention: "Balance & Vitality",
@@ -856,7 +856,7 @@ const translations = {
         },
         trophy: {
             unlockTitle: "Achievement Unlocked!",
-            shareMessage: "I unlocked the '{{trophyName}}' achievement on GlucoLife! #GlucoLife",
+            shareMessage: "I unlocked the '{{trophyName}}' achievement on GlucoViva! #GlucoViva",
             scanner_novice: {
                 name: "Scan Novice",
                 description: "You've scanned your first 10 meals. Keep it up!"
@@ -891,7 +891,7 @@ const translations = {
             generating: "Generating image...",
             error: "Could not generate the image. Please try again.",
             share: "Share Image",
-            shareText: "Here's a daily nutrition tip from the GlucoLife app!"
+            shareText: "Here's a daily nutrition tip from the GlucoViva app!"
         }
     }
   }
