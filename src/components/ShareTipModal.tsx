@@ -77,7 +77,7 @@ const ShareTipModal: React.FC<ShareTipModalProps> = ({ isOpen, onClose, tipText 
                     context.font = 'bold 64px sans-serif';
                     context.textAlign = 'center';
                     context.textBaseline = 'top';
-                    context.fillText('GlucoLife', width / 2, padding);
+                    context.fillText('GlucoViva', width / 2, padding);
 
                     // Subtitle
                     context.font = 'italic 36px sans-serif';
@@ -97,7 +97,7 @@ const ShareTipModal: React.FC<ShareTipModalProps> = ({ isOpen, onClose, tipText 
                     context.font = '32px sans-serif';
                     context.textAlign = 'center';
                     context.textBaseline = 'bottom';
-                    context.fillText('Shared from GlucoLife App', width / 2, height - padding);
+                    context.fillText('Shared from GlucoViva App', width / 2, height - padding);
                     
                     // Assign to visible canvas for preview
                     if (canvasRef.current) {
@@ -130,7 +130,7 @@ const ShareTipModal: React.FC<ShareTipModalProps> = ({ isOpen, onClose, tipText 
     const handleShare = async () => {
         if (!imageBlob) return;
 
-        const file = new File([imageBlob], 'glucolife-tip.png', { type: 'image/png' });
+        const file = new File([imageBlob], 'glucoviva-tip.png', { type: 'image/png' });
         const shareData = {
             title: t('dashboard.aiTipTitle'),
             text: t('shareTip.shareText'),
@@ -143,7 +143,7 @@ const ShareTipModal: React.FC<ShareTipModalProps> = ({ isOpen, onClose, tipText 
             } else {
                  const link = document.createElement('a');
                  link.href = URL.createObjectURL(imageBlob);
-                 link.download = 'glucolife-tip.png';
+                 link.download = 'glucoviva-tip.png';
                  link.click();
                  URL.revokeObjectURL(link.href);
             }

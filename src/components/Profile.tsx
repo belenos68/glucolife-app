@@ -122,7 +122,7 @@ const ExportDataModal: React.FC<{ isOpen: boolean; onClose: () => void; onShare:
             const meals: Meal[] = JSON.parse(mealsStr);
             const mealCsv = convertObjectToCSV(meals);
             if (mealCsv) {
-                downloadFile(mealCsv, 'glucolife_meals.csv', 'text/csv');
+                downloadFile(mealCsv, 'glucoviva_meals.csv', 'text/csv');
             }
         }
         
@@ -131,7 +131,7 @@ const ExportDataModal: React.FC<{ isOpen: boolean; onClose: () => void; onShare:
             const readings = JSON.parse(readingsStr);
              const readingsCsv = convertObjectToCSV(readings);
             if (readingsCsv) {
-                downloadFile(readingsCsv, 'glucolife_readings.csv', 'text/csv');
+                downloadFile(readingsCsv, 'glucoviva_readings.csv', 'text/csv');
             }
         }
 
@@ -147,7 +147,7 @@ const ExportDataModal: React.FC<{ isOpen: boolean; onClose: () => void; onShare:
             appData: JSON.parse(localStorage.getItem('gluco-app-data') || '{}'),
         };
         const jsonString = JSON.stringify(allData, null, 2);
-        downloadFile(jsonString, 'glucolife_data.json', 'application/json');
+        downloadFile(jsonString, 'glucoviva_data.json', 'application/json');
     };
 
     if (!isOpen) return null;
@@ -1097,13 +1097,13 @@ const InviteFriendCard: React.FC = () => {
 
     const handleInvite = async () => {
         // Message fixe avec lien Vercel
-        const messageFr = "J'utilise GlucoLife pour mieux gérer ma glycémie, c'est super utile ! Je te la recommande. #GlucoLife https://glucolife-app-public.vercel.app";
-        const messageEn = "I use GlucoLife to better manage my blood sugar, it's super useful! I recommend it. #GlucoLife https://glucolife-app-public.vercel.app";
+        const messageFr = "J'utilise GlucoViva pour mieux gérer ma glycémie, c'est super utile ! Je te la recommande. #GlucoLife https://glucoviva-app-public.vercel.app";
+        const messageEn = "I use GlucoViva to better manage my blood sugar, it's super useful! I recommend it. #GlucoLife https://glucoviva-app-public.vercel.app";
 
         const shareData = {
             title: t('profile.invite.shareTitle'), // traduit via ton fichier de langue
             text: t('language') === 'fr' ? messageFr : messageEn,
-            url: 'https://glucolife-app-public.vercel.app',
+            url: 'https://glucoviva-app-public.vercel.app',
         };
 
         try {

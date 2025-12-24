@@ -28,7 +28,7 @@ const LandingPage = () => {
         <div className="min-h-screen bg-gradient-to-br from-mint-green-light to-calm-blue">
             <div className="container mx-auto max-w-lg px-4 py-8 text-white text-center">
                 <header className="py-16">
-                    <h1 className="text-5xl font-extrabold mb-4 drop-shadow-lg">GlucoLife</h1>
+                    <h1 className="text-5xl font-extrabold mb-4 drop-shadow-lg">GlucoViva</h1>
                     <p className="text-xl mb-8 font-light">{t('landing.subtitle')}</p>
                     <button 
                         onClick={() => navigate('/auth')}

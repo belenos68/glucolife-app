@@ -67,7 +67,7 @@ const ShareChartModal: React.FC<ShareChartModalProps> = ({ isOpen, onClose, char
                         ctx.font = 'bold 64px sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'top';
-                        ctx.fillText('GlucoLife', width / 2, padding);
+                        ctx.fillText('GlucoViva', width / 2, padding);
 
                         ctx.font = '42px sans-serif';
                         ctx.globalAlpha = 0.8;
@@ -96,7 +96,7 @@ const ShareChartModal: React.FC<ShareChartModalProps> = ({ isOpen, onClose, char
                         ctx.font = '32px sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
-                        ctx.fillText('Shared from GlucoLife App', width / 2, height - padding / 2);
+                        ctx.fillText('Shared from GlucoViva App', width / 2, height - padding / 2);
 
                         if(canvasRef.current) {
                             const previewCtx = canvasRef.current.getContext('2d');
@@ -131,7 +131,7 @@ const ShareChartModal: React.FC<ShareChartModalProps> = ({ isOpen, onClose, char
     const handleShare = async () => {
         if (!imageBlob) return;
 
-        const file = new File([imageBlob], 'glucolife-chart.png', { type: 'image/png' });
+        const file = new File([imageBlob], 'glucoviva-chart.png', { type: 'image/png' });
         const shareData = {
             title: t('dashboard.historyChartTitle'),
             text: t('shareTip.shareText'),
@@ -144,7 +144,7 @@ const ShareChartModal: React.FC<ShareChartModalProps> = ({ isOpen, onClose, char
             } else {
                  const link = document.createElement('a');
                  link.href = URL.createObjectURL(imageBlob);
-                 link.download = 'glucolife-chart.png';
+                 link.download = 'glucoviva-chart.png';
                  link.click();
                  URL.revokeObjectURL(link.href);
             }

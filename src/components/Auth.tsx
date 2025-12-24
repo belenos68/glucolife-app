@@ -65,7 +65,7 @@ const Auth: React.FC = () => {
 
     if (DEV_MODE) {
       if (token === DEV_OTP) {
-        const testEmail = `test_${phone.replace(/[^0-9]/g, '')}@glucolife.dev`;
+        const testEmail = `test_${phone.replace(/[^0-9]/g, '')}@glucoviva.dev`;
 
         try {
           // Essayer de créer le compte
@@ -227,7 +227,7 @@ const Auth: React.FC = () => {
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text'
           }}>
-            GlucoLife
+            GlucoViva
           </h1>
           <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px' }}>
             {DEV_MODE && "🧪 Mode développement • "}
