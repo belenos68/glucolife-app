@@ -49,11 +49,3 @@ export const communityPostsData: CommunityPost[] = [
     reactions: { like: 32, love: 22, idea: 2 },
   },
 ];
-
-export const leaderboardData: LeaderboardUser[] = [
-  { rank: 1, name: 'Hélène G.', nickname: 'HeleneFit', avatarUrl: 'https://picsum.photos/seed/helene/200', score: 2450, rankChange: 'up' },
-  { rank: 2, name: 'Thomas R.', avatarUrl: 'https://picsum.photos/seed/thomas/200', score: 2310, rankChange: 'down' },
-  { rank: 3, name: 'Alex Doe', nickname: 'Lex', avatarUrl: `https://picsum.photos/seed/alex/200`, score: 2280, isCurrentUser: true, rankChange: 'stable' },
-  { rank: 4, name: 'Laura B.', avatarUrl: 'https://picsum.photos/seed/laura/200', score: 2150, rankChange: 'up' },
-  { rank: 5, name: 'David M.', nickname: 'DaveRunner', avatarUrl: 'https://picsum.photos/seed/david/200', score: 2090, rankChange: 'stable' },
-];

@@ -63,14 +63,31 @@ const ShareMealModal: React.FC<{ meal: Meal | null, isOpen: boolean, onClose: ()
         setIsPublishing(true);
 
         const newPost: CommunityPost = {
-            id: new Date().toISOString(),
-            author: { name: user.name, avatarUrl: user.avatarUrl, nickname: user.nickname },
-            content: message,
-            category: 'Partage',
-            timestamp: new Date().toISOString(),
-            reactions: { like: 0, love: 0, idea: 0 },
-            sharedMeal: meal
-        };
+  id: crypto.randomUUID(),
+
+  author: {
+    name: user.name,
+    avatarUrl: user.avatarUrl,
+    nickname: user.nickname,
+  },
+
+  content: message?.trim()
+    ? message
+    : `J’ai partagé mon plat scanné : ${meal.name}`,
+
+  category: 'Partage',
+  timestamp: new Date().toISOString(),
+
+  reactions: {
+    like: 0,
+    love: 0,
+    idea: 0,
+  },
+
+  // 🔥 C’est CETTE clé qui permet le classement
+  sharedMeal: meal,
+};
+
 
         setTimeout(() => {
             const storedPosts = localStorage.getItem('gluco-community-posts');

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useAuth, useLanguage } from '../App';
 import { CommunityPost, LeaderboardUser, ReactionType, Meal, User, Goal } from '../types';
-import { communityPostsData, leaderboardData } from '../data/community';
+import { communityPostsData } from '../data/community';
 import { communityMeals } from '../data/communityMeals';
 import { ThumbUpIcon, HeartIcon, LightbulbIcon, ShareIcon, TrophyIcon, SparklesIcon, StarIcon, ArrowUpIcon, ArrowDownIcon, MinusIcon, TrashIcon } from './icons/Icons';
 import { GoogleGenAI, Type } from "@google/genai";
@@ -516,7 +516,6 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
     const { t } = useLanguage();
     const { user } = useAuth();
     const [posts, setPosts] = useState<CommunityPost[]>([]);
-    const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
     const [postContent, setPostContent] = useState('');
     const [isPosting, setIsPosting] = useState(false);
     const [sortBy, setSortBy] = useState<'date' | 'reactions'>('date');
@@ -528,6 +527,37 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
         thumbPosition: 0,
     });
     
+ // Spécification explicite du type pour corriger l'erreur de détection
+const dynamicLeaderboard: LeaderboardUser[] = useMemo(() => {
+    const stats: Record<string, { count: number; author: any }> = {};
+    
+    posts.forEach(post => {
+        // On compte les partages de repas (sharedMeal) par utilisateur [cite: 224, 225]
+        if (post.sharedMeal && post.author.nickname) {
+            const nick = post.author.nickname;
+            if (!stats[nick]) {
+                stats[nick] = { count: 0, author: post.author };
+            }
+            stats[nick].count += 1;
+        }
+    });
+
+    return Object.values(stats)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5)
+        .map((item, index) => ({
+            id: item.author.nickname || `user-${index}`,
+            name: item.author.name,
+            nickname: item.author.nickname || '',
+            avatarUrl: item.author.avatarUrl,
+            // 🚨 REMPLACEZ scannedMealsCount PAR score ICI
+            score: item.count, 
+            rank: index + 1,
+            // Utilisez "as const" pour que le type soit exactement 'up' et non 'string'
+            trend: 'up' as const 
+        }));
+}, [posts]);
+
     const topCommunityMeals = useMemo(() => {
         return [...communityMeals]
             .sort((a, b) => (b.communityRating ?? 0) - (a.communityRating ?? 0))
@@ -556,10 +586,8 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
             updateScrollState();
             container.addEventListener('scroll', updateScrollState);
             window.addEventListener('resize', updateScrollState);
-            
             const observer = new MutationObserver(updateScrollState);
             observer.observe(container, { childList: true, subtree: true });
-
             return () => {
                 container.removeEventListener('scroll', updateScrollState);
                 window.removeEventListener('resize', updateScrollState);
@@ -569,32 +597,23 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
     }, [updateScrollState]);
 
     useEffect(() => {
-        const storedPosts = localStorage.getItem('gluco-community-posts');
-        let allPosts = storedPosts ? JSON.parse(storedPosts) : communityPostsData;
-
-        const storedReactions = JSON.parse(localStorage.getItem('gluco-post-reactions') || '{}');
-        allPosts = allPosts.map((post: CommunityPost) => ({
-            ...post,
-            userReaction: storedReactions[post.id]
-        }));
-        
-        setPosts(allPosts);
-        setLeaderboard(leaderboardData);
-        
-        const handlePostsUpdate = () => {
-             const updatedPosts = localStorage.getItem('gluco-community-posts');
-             if(updatedPosts) {
-                 const parsedPosts = JSON.parse(updatedPosts).map((post: CommunityPost) => ({
-                    ...post,
-                    userReaction: storedReactions[post.id]
-                 }));
-                 setPosts(parsedPosts);
-             }
+        const loadPosts = () => {
+            const storedPosts = localStorage.getItem('gluco-community-posts');
+            const initialPosts = storedPosts ? JSON.parse(storedPosts) : communityPostsData;
+            const storedReactions = JSON.parse(localStorage.getItem('gluco-post-reactions') || '{}');
+            
+            const mergedPosts = initialPosts.map((post: CommunityPost) => ({
+                ...post,
+                userReaction: storedReactions[post.id]
+            }));
+            setPosts(mergedPosts);
         };
 
+        loadPosts();
+
+        const handlePostsUpdate = () => loadPosts();
         window.addEventListener('gluco-community-posts-updated', handlePostsUpdate);
         return () => window.removeEventListener('gluco-community-posts-updated', handlePostsUpdate);
-
     }, []);
 
     const handleReaction = (postId: string, reaction: ReactionType) => {
@@ -604,18 +623,13 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
                 if (p.id === postId) {
                     const oldReaction = p.userReaction;
                     const newReactions = { ...p.reactions };
-
-                    if (oldReaction) {
-                        newReactions[oldReaction] = Math.max(0, newReactions[oldReaction] - 1);
-                    }
-                    
+                    if (oldReaction) newReactions[oldReaction] = Math.max(0, newReactions[oldReaction] - 1);
                     if (oldReaction !== reaction) {
                         newReactions[reaction]++;
                         storedReactions[postId] = reaction;
                     } else {
                         delete storedReactions[postId];
                     }
-                    
                     localStorage.setItem('gluco-post-reactions', JSON.stringify(storedReactions));
                     return { ...p, reactions: newReactions, userReaction: oldReaction === reaction ? undefined : reaction };
                 }
@@ -627,9 +641,7 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
 
     const handleCreatePost = () => {
         if (!postContent.trim() || !user) return;
-        
         setIsPosting(true);
-        
         const newPost: CommunityPost = {
             id: new Date().toISOString(),
             author: { name: user.name, avatarUrl: user.avatarUrl, nickname: user.nickname },
@@ -638,7 +650,6 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
             timestamp: new Date().toISOString(),
             reactions: { like: 0, love: 0, idea: 0 },
         };
-
         setTimeout(() => {
             const updatedPosts = [newPost, ...posts];
             setPosts(updatedPosts);
@@ -653,56 +664,44 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
         const updatedPosts = posts.filter(p => p.id !== postToDelete.id);
         setPosts(updatedPosts);
         localStorage.setItem('gluco-community-posts', JSON.stringify(updatedPosts));
-        setPostToDelete(null); // Close modal
+        setPostToDelete(null);
     };
     
     const displayedPosts = useMemo(() => {
         let processedPosts = [...posts];
-
         if (sortBy === 'date') {
             processedPosts.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         } else if (sortBy === 'reactions') {
             processedPosts.sort((a, b) => {
-                const reactionsA = a.reactions.like + a.reactions.love + a.reactions.idea;
-                const reactionsB = b.reactions.like + b.reactions.love + b.reactions.idea;
-                return reactionsB - reactionsA;
+                const rA = a.reactions.like + a.reactions.love + a.reactions.idea;
+                const rB = b.reactions.like + b.reactions.love + b.reactions.idea;
+                return rB - rA;
             });
         }
-
         return processedPosts;
     }, [posts, sortBy]);
 
     return (
         <div className="space-y-6 animate-fade-in">
-             <section>
-                 <MealPlanCard />
-             </section>
+             <section><MealPlanCard /></section>
 
              <section>
                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{t('share.community.topMealsTitle')}</h2>
-                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('share.community.topMealsSubtitle')}</p>
-                 <div
-                     ref={scrollContainerRef}
-                     className="flex space-x-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide"
-                 >
+                 <div ref={scrollContainerRef} className="flex space-x-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
                      {topCommunityMeals.map(meal => (
                         <CommunityMealCard key={meal.id} meal={meal} onClick={() => onCommunityMealSelect(meal)} />
                      ))}
                  </div>
                  {scrollState.isScrollable && (
                     <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 relative overflow-hidden">
-                        <div
-                            className="h-1.5 bg-mint-green rounded-full absolute top-0"
-                            style={{
-                                width: `${scrollState.thumbWidth}%`,
-                                left: `${scrollState.thumbPosition}%`,
-                            }}
-                        ></div>
+                        <div className="h-1.5 bg-mint-green rounded-full absolute top-0"
+                             style={{ width: `${scrollState.thumbWidth}%`, left: `${scrollState.thumbPosition}%` }}></div>
                     </div>
                 )}
             </section>
 
-            <Leaderboard users={leaderboard} />
+            {/* Utilisation du leaderboard dynamique calculé plus haut */}
+            <Leaderboard users={dynamicLeaderboard} />
             
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-4 space-y-3">
                 <h3 className="font-bold text-gray-800 dark:text-gray-100">{t('share.community.createPost.title')}</h3>
@@ -723,21 +722,16 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
             </div>
 
             <section>
-                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">{t('share.community.postsTitle')}</h2>
-
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-md mb-4">
-                    <div className="flex items-center space-x-2">
-                         <label htmlFor="sortBy" className="text-sm font-semibold text-gray-500 dark:text-gray-400">{t('share.community.sort')}:</label>
-                         <select
-                            id="sortBy"
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value as 'date' | 'reactions')}
-                            className="bg-gray-100 dark:bg-gray-700 border-none rounded-md py-1 pl-2 pr-8 text-sm font-semibold text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-green"
-                         >
-                            <option value="date">{t('share.community.sortOptions.date')}</option>
-                            <option value="reactions">{t('share.community.sortOptions.reactions')}</option>
-                         </select>
-                    </div>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{t('share.community.postsTitle')}</h2>
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as 'date' | 'reactions')}
+                        className="bg-gray-100 dark:bg-gray-700 border-none rounded-md py-1 px-2 text-sm font-semibold text-gray-700 dark:text-gray-200"
+                    >
+                        <option value="date">{t('share.community.sortOptions.date')}</option>
+                        <option value="reactions">{t('share.community.sortOptions.reactions')}</option>
+                    </select>
                 </div>
 
                 {displayedPosts.length > 0 ? (
@@ -747,17 +741,18 @@ const CommunityView: React.FC<{ onCommunityMealSelect: (meal: Meal) => void; }> 
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
-                        <p className="text-gray-500 dark:text-gray-400">{t('share.community.noPostsFound')}</p>
+                    <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-gray-500">
+                        {t('share.community.noPostsFound')}
                     </div>
                 )}
             </section>
-             <ConfirmationModal
+
+            <ConfirmationModal
                 isOpen={!!postToDelete}
                 onClose={() => setPostToDelete(null)}
                 onConfirm={handleDeletePost}
                 title="Supprimer la publication"
-                message="Êtes-vous sûr de vouloir supprimer cette publication ? Cette action est irréversible."
+                message="Êtes-vous sûr de vouloir supprimer cette publication ?"
                 confirmText="Supprimer"
                 cancelText="Annuler"
             />

@@ -5,14 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GlucoViva</title>
-    <base href="." />
+
     <meta name="application-name" content="GlucoViva" />
     <meta name="apple-mobile-web-app-title" content="GlucoViva" />
     <meta property="og:site_name" content="GlucoViva" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -22,19 +25,19 @@
           extend: {
             colors: {
               'mint-green': {
-                'light': '#34d399',
-                'DEFAULT': '#10b981',
-                'dark': '#059669'
+                light: '#34d399',
+                DEFAULT: '#10b981',
+                dark: '#059669'
               },
               'calm-blue': {
-                'light': '#7dd3fc',
-                'DEFAULT': '#38bdf8',
-                'dark': '#0ea5e9'
+                light: '#7dd3fc',
+                DEFAULT: '#38bdf8',
+                dark: '#0ea5e9'
               },
               'soft-violet': {
-                'light': '#a78bfa',
-                'DEFAULT': '#8b5cf6',
-                'dark': '#7c3aed'
+                light: '#a78bfa',
+                DEFAULT: '#8b5cf6',
+                dark: '#7c3aed'
               }
             },
             fontFamily: {
@@ -61,23 +64,21 @@
         },
       }
     </script>
-    
-<style type="text/css">
-  body {
-    font-family: 'Inter', sans-serif;
-  }
-  /* Custom scrollbar for webkit browsers */
-  .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-  }
-  /* For IE, Edge and Firefox */
-  .scrollbar-hide {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-  }
-</style>
 
-</head>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+
   <body class="bg-gray-50 dark:bg-gray-900">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
